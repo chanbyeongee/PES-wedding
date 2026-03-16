@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>박은상 & 김하나 결혼합니다</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@300;400;500;700&display=swap');
+
+        :root {
+            --gold: #C9A96E;
+            --ivory: #FFFFF0;
+            --charcoal: #2C2C2C;
+            --rose: #E8B4B8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--ivory);
+            color: var(--charcoal);
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .serif { font-family: 'Noto Serif KR', serif; }
+
+        /* ══════════════════════════════════
+           CINEMATIC OPENING BARS
+           ══════════════════════════════════ */
+        .cinema-bar {
+            position: fixed;
+            left: 0; right: 0;
+            height: 50vh;
+            background: #000;
+            z-index: 9999;
+            pointer-events: none;
+            animation: barOpen 1.8s cubic-bezier(0.65, 0, 0.35, 1) 0.8s forwards;
+        }
+        .cinema-bar--top { top: 0; }
+        .cinema-bar--bottom { bottom: 0; }
+        @keyframes barOpen { to { height: 0; } }
+
+        /* ══════════════════════════════════
+           SCROLL-DRIVEN ANIMATIONS
+           ══════════════════════════════════ */
+        @supports (animation-timeline: view()) {
+            .reveal {
+                animation: sv-reveal linear both;
+                animation-timeline: view();
+                animation-range: entry 0% cover 30%;
+            }
+            .reveal-left {
+                animation: sv-left linear both;
+                animation-timeline: view();
+                animation-range: entry 0% cover 30%;
+            }
+            .reveal-right {
+                animation: sv-right linear both;
+                animation-timeline: view();
+                animation-range: entry 0% cover 30%;
+            }
+            .reveal-scale {
+                animation: sv-scale linear both;
+                animation-timeline: view();
+                animation-range: entry 0% cover 30%;
+            }
+        }
+
+        @keyframes sv-reveal {
+            from { opacity: 0; transform: translateY(60px); filter: blur(8px); }
+            to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+        }
+        @keyframes sv-left {
+            from { opacity: 0; transform: translateX(-80px) rotate(-1.5deg); }
+            to   { opacity: 1; transform: translateX(0)     rotate(0); }
+        }
+        @keyframes sv-right {
+            from { opacity: 0; transform: translateX(80px) rotate(1.5deg); }
+            to   { opacity: 1; transform: translateX(0)    rotate(0); }
+        }
+        @keyframes sv-scale {
+            from { opacity: 0; transform: scale(0.85); filter: blur(12px); }
+            to   { opacity: 1; transform: scale(1);    filter: blur(0); }
+        }
+
+        /* ══════════════════════════════════
+           HERO SECTION
+           ══════════════════════════════════ */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: #000;
+        }
+
+        /* Vignette */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 25%, rgba(0,0,0,0.55) 100%);
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
+            background-image: url('https://imagedelivery.net/9PYUDgg_yiUa2u-j77sFBg/ad85de1c-e2d6-498b-cb61-a8401d7d0d00/public');
+            background-size: contain;
+            background-position: center 20%;
+            background-repeat: no-repeat;
+            z-index: 1;
+            opacity: 0;
+            filter: brightness(0.85) contrast(1.1) saturate(1.1);
+            animation: kenBurns 30s ease-out infinite alternate, heroFadeIn 2.5s ease forwards 1.2s;
+        }
+
+        /* Shifting gradient overlay */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(44,44,44,0.2), rgba(0,0,0,0.6), rgba(44,44,44,0.2));
+            background-size: 400% 400%;
+            z-index: 2;
+            animation: overlayDrift 10s ease-in-out infinite;
+        }
+
+        /* Diagonal light sweep */
+        .hero-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 42%, rgba(255,255,255,0.06) 46%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 54%, transparent 58%);
+            background-size: 200% 100%;
+            animation: lightSweep 5s ease-in-out 3s infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            color: #fff;
+            padding: 20px;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards 2s;
+        }
+
+        .notice-header {
+            font-size: 0.85rem;
+            letter-spacing: 0;
+            margin-bottom: 2.5rem;
+            color: var(--gold);
+            opacity: 0;
+            animation: fadeIn 1.5s forwards 2.4s, letterExpand 2s forwards 2.4s;
+        }
+
+        .hero-names {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
+            background: linear-gradient(to right, #FFF 15%, var(--gold) 50%, #FFF 85%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            clip-path: inset(0 100% 0 0);
+            animation: shimmer 3.5s linear infinite, clipRevealText 1.8s cubic-bezier(0.25, 0.1, 0.25, 1) 2.8s forwards;
+        }
+
+        .hero-date {
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            font-weight: 300;
+            opacity: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            animation: fadeIn 1.5s forwards 3.8s;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            color: var(--gold);
+            font-size: 1.6rem;
+            text-decoration: none;
+            opacity: 0;
+            animation: bounce 2s infinite, fadeIn 1.5s forwards 4.5s;
+        }
+
+        /* ══════════════════════════════════
+           PARTICLES & PETALS
+           ══════════════════════════════════ */
+        .particles {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleRise linear infinite;
+            box-shadow: 0 0 6px 1px rgba(201,169,110,0.4);
+        }
+        .petal {
+            position: absolute;
+            background: var(--rose);
+            border-radius: 50% 0 50% 50%;
+            opacity: 0;
+            animation: petalDrift linear infinite;
+            filter: drop-shadow(0 0 3px rgba(232,180,184,0.3));
+        }
+
+        /* ══════════════════════════════════
+           GREETING SECTION
+           ══════════════════════════════════ */
+        .section-greeting {
+            position: relative;
+            z-index: 20;
+            padding: 110px 20px 100px;
+            background: var(--ivory);
+        }
+        .section-greeting::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(var(--gold) 0.5px, transparent 0.5px);
+            background-size: 30px 30px;
+            opacity: 0.05;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Ornamental header */
+        .ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 50px;
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 6px;
+        }
+        .ornament::before, .ornament::after {
+            content: '';
+            width: 50px;
+            height: 1px;
+        }
+        .ornament::before { background: linear-gradient(to right, transparent, var(--gold)); }
+        .ornament::after  { background: linear-gradient(to left, transparent, var(--gold)); }
+
+        .quote {
+            font-size: 1.45rem;
+            color: var(--gold);
+            margin-bottom: 50px;
+            line-height: 2;
+            font-style: italic;
+        }
+
+        .divider {
+            width: 1px;
+            height: 55px;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            margin: 0 auto 50px;
+        }
+
+        .greeting-text {
+            font-size: 1.05rem;
+            line-height: 2.4;
+            font-weight: 300;
+            margin-bottom: 60px;
+            color: #555;
+        }
+
+        /* Family info with corner ornaments */
+        .family-info {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 60px;
+            font-size: 1.15rem;
+            padding: 45px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(201,169,110,0.12);
+            position: relative;
+        }
+        .family-info::before, .family-info::after {
+            content: '';
+            position: absolute;
+            width: 18px; height: 18px;
+            border-color: var(--gold);
+            border-style: solid;
+            opacity: 0.4;
+        }
+        .family-info::before { top: 12px; left: 12px; border-width: 1px 0 0 1px; }
+        .family-info::after  { bottom: 12px; right: 12px; border-width: 0 1px 1px 0; }
+
+        .family-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        .family-role {
+            color: #999;
+            font-size: 0.9rem;
+            width: 50px;
+            text-align: right;
+        }
+        .family-names {
+            font-weight: 500;
+            width: 250px;
+            text-align: right;
+            white-space: nowrap;
+        }
+        .family-names span {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: #777;
+            margin-right: 8px;
+        }
+
+        /* ══════════════════════════════════
+           VENUE CARD — rotating gradient border
+           ══════════════════════════════════ */
+        @property --border-angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+        .venue-wrap {
+            position: relative;
+            padding: 2px;
+            border-radius: 16px;
+            background: conic-gradient(from var(--border-angle), var(--gold), var(--rose), var(--gold), transparent, var(--gold));
+            animation: spinBorder 4s linear infinite;
+            margin-bottom: 50px;
+        }
+        @keyframes spinBorder { to { --border-angle: 360deg; } }
+
+        .venue-info {
+            background: rgba(255,255,240,0.97);
+            padding: 45px;
+            border-radius: 14px;
+        }
+        .venue-info h3 {
+            font-size: 1.3rem;
+            color: var(--charcoal);
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        .venue-info p {
+            line-height: 2;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* ══════════════════════════════════
+           CALENDAR
+           ══════════════════════════════════ */
+        .calendar-wrapper {
+            margin: 0 auto 50px;
+            max-width: 370px;
+            background: #fff;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            border: 1px solid rgba(201,169,110,0.12);
+        }
+        .calendar-header {
+            font-size: 1.1rem;
+            color: var(--charcoal);
+            margin-bottom: 25px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+        .cal-hd {
+            font-size: 0.7rem;
+            color: #bbb;
+            padding-bottom: 10px;
+            font-weight: 400;
+        }
+        .cal-d {
+            width: 30px; height: 30px;
+            line-height: 30px;
+            margin: 0 auto;
+            border-radius: 50%;
+            font-size: 0.85rem;
+            color: #777;
+        }
+        .cal-sun { color: var(--rose); }
+        .cal-e { visibility: hidden; }
+        .cal-today {
+            background: var(--gold);
+            color: #fff !important;
+            font-weight: 700;
+            animation: calGlow 2s ease-in-out infinite;
+        }
+        @keyframes calGlow {
+            0%, 100% { box-shadow: 0 0 0 3px rgba(201,169,110,0.15); transform: scale(1); }
+            50%      { box-shadow: 0 0 0 8px rgba(201,169,110,0.08), 0 0 20px rgba(201,169,110,0.25); transform: scale(1.12); }
+        }
+
+        /* ══════════════════════════════════
+           TRANSPORT
+           ══════════════════════════════════ */
+        .transport-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 50px;
+        }
+        .transport-card {
+            background: #fff;
+            padding: 22px 12px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .transport-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.07);
+            border-color: var(--gold);
+        }
+        .t-icon  { font-size: 1.6rem; margin-bottom: 10px; }
+        .t-title { font-weight: 600; color: var(--charcoal); margin-bottom: 6px; font-size: 0.85rem; }
+        .t-desc  { font-size: 0.78rem; color: #999; line-height: 1.6; }
+
+        /* ══════════════════════════════════
+           ACCOUNT
+           ══════════════════════════════════ */
+        .account-card {
+            padding: 28px 30px;
+            border-radius: 12px;
+            border: 1px solid var(--gold);
+            margin: 0 auto 50px;
+            max-width: 420px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(201,169,110,0.04));
+        }
+        .acc-label { font-size: 0.8rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 14px; }
+        .acc-num   { font-size: 1rem; color: var(--charcoal); font-weight: 600; margin-bottom: 4px; letter-spacing: 0.5px; }
+        .acc-name  { font-size: 0.85rem; color: #aaa; }
+
+        .mobile-invitation {
+            display: inline-block;
+            background: var(--charcoal);
+            color: var(--ivory);
+            padding: 14px 36px;
+            border-radius: 30px;
+            font-size: 0.88rem;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .mobile-invitation:hover {
+            background: transparent;
+            color: var(--charcoal);
+            border-color: var(--charcoal);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        /* ══════════════════════════════════
+           GALLERY
+           ══════════════════════════════════ */
+        .gallery {
+            padding: 100px 20px;
+            background: #FAFAFA;
+        }
+        .gallery-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--charcoal);
+            margin-bottom: 70px;
+            letter-spacing: 5px;
+        }
+        .gallery-title::after {
+            content: '';
+            display: block;
+            width: 36px; height: 2px;
+            background: var(--gold);
+            margin: 14px auto 0;
+        }
+
+        .gallery-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 18px;
+            grid-auto-flow: dense;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+
+        /* Shine sweep on hover */
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.25) 55%, transparent 60%);
+            z-index: 2;
+            transform: translateX(-200%);
+            transition: transform 0.7s ease;
+        }
+        .gallery-item:hover::before { transform: translateX(200%); }
+
+        /* Bottom gradient on hover */
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.35), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+        .gallery-item:hover::after { opacity: 1; }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            object-position: center top;
+            transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.1);
+            filter: brightness(1.05) contrast(1.05);
+        }
+
+        .item-with-dog   { grid-column: span 7; grid-row: span 2; height: 600px; }
+        .item-veil        { grid-column: span 5; height: 290px; }
+        .item-formal      { grid-column: span 5; height: 290px; }
+        .item-solo-man    { grid-column: span 6; height: 400px; }
+        .item-solo-bride  { grid-column: span 6; height: 400px; }
+
+        /* ══════════════════════════════════
+           FOOTER
+           ══════════════════════════════════ */
+        .footer {
+            background: var(--charcoal);
+            color: var(--ivory);
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 25px; left: 25px; right: 25px; bottom: 25px;
+            border: 1px solid rgba(201,169,110,0.2);
+            pointer-events: none;
+        }
+
+        /* Sparkle dots */
+        .sparkle {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: twinkle ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            from { opacity: 0; transform: scale(0.5); }
+            to   { opacity: 0.7; transform: scale(1.5); }
+        }
+
+        .footer-label {
+            font-size: 0.85rem;
+            color: var(--gold);
+            letter-spacing: 6px;
+            margin-bottom: 35px;
+        }
+        .wedding-date {
+            font-size: 4.2rem;
+            font-weight: 300;
+            color: var(--gold);
+            line-height: 1.2;
+            margin-bottom: 8px;
+            animation: dateGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes dateGlow {
+            from { text-shadow: 0 0 15px rgba(201,169,110,0.15); }
+            to   { text-shadow: 0 0 40px rgba(201,169,110,0.4), 0 0 80px rgba(201,169,110,0.1); }
+        }
+        .wedding-day-sub {
+            font-size: 0.95rem;
+            letter-spacing: 8px;
+            color: #888;
+            margin-bottom: 55px;
+        }
+        .closing-msg {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: #bbb;
+            letter-spacing: 2px;
+        }
+
+        /* ══════════════════════════════════
+           KEYFRAMES
+           ══════════════════════════════════ */
+        @keyframes kenBurns {
+            0%   { transform: scale(1);    background-position: center 20%; }
+            100% { transform: scale(1.18); background-position: center 30%; }
+        }
+        @keyframes heroFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 0.85; }
+        }
+        @keyframes overlayDrift {
+            0%, 100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
+        }
+        @keyframes lightSweep {
+            0%, 25%  { background-position: 200% 0; }
+            75%, 100% { background-position: -200% 0; }
+        }
+        @keyframes shimmer {
+            0%   { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes clipRevealText {
+            from { opacity: 1; clip-path: inset(0 100% 0 0); }
+            to   { opacity: 1; clip-path: inset(0 0% 0 0); }
+        }
+        @keyframes letterExpand {
+            from { letter-spacing: 0; }
+            to   { letter-spacing: 5px; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40%  { transform: translateY(-14px) translateX(-50%); }
+            60%  { transform: translateY(-7px) translateX(-50%); }
+        }
+        @keyframes particleRise {
+            0%   { transform: translateY(100vh) translateX(0) rotate(0); opacity: 0; }
+            12%  { opacity: 0.6; }
+            88%  { opacity: 0.6; }
+            100% { transform: translateY(-80px) translateX(70px) rotate(360deg); opacity: 0; }
+        }
+        @keyframes petalDrift {
+            0%   { transform: translateY(-20px) translateX(0) rotate(0) scale(0.8); opacity: 0; }
+            12%  { opacity: 0.45; }
+            88%  { opacity: 0.45; }
+            100% { transform: translateY(100vh) translateX(50px) rotate(720deg) scale(1.1); opacity: 0; }
+        }
+
+        /* ══════════════════════════════════
+           RESPONSIVE
+           ══════════════════════════════════ */
+        @media (max-width: 768px) {
+            .hero-names { font-size: 2.8rem; }
+            .gallery-grid { display: flex; flex-direction: column; }
+            .item-with-dog, .item-veil, .item-formal, .item-solo-man, .item-solo-bride { height: 350px; }
+            .family-row { flex-direction: column; gap: 5px; }
+            .family-role { text-align: center; width: auto; }
+            .family-names { text-align: center; width: auto; }
+            .transport-grid { grid-template-columns: 1fr; }
+            .wedding-date { font-size: 2.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CINEMATIC OPENING -->
+    <div class="cinema-bar cinema-bar--top"></div>
+    <div class="cinema-bar cinema-bar--bottom"></div>
+
+    <!-- ═══════ HERO ═══════ -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+
+        <div class="particles">
+            <div class="particle" style="width:4px;height:4px;left:3vw;animation-duration:11s;animation-delay:0s"></div>
+            <div class="particle" style="width:6px;height:6px;left:8vw;animation-duration:14s;animation-delay:2s"></div>
+            <div class="particle" style="width:3px;height:3px;left:13vw;animation-duration:16s;animation-delay:5s"></div>
+            <div class="particle" style="width:7px;height:7px;left:18vw;animation-duration:9s;animation-delay:1s"></div>
+            <div class="particle" style="width:5px;height:5px;left:23vw;animation-duration:13s;animation-delay:3s"></div>
+            <div class="particle" style="width:4px;height:4px;left:28vw;animation-duration:17s;animation-delay:7s"></div>
+            <div class="particle" style="width:8px;height:8px;left:33vw;animation-duration:10s;animation-delay:0s"></div>
+            <div class="particle" style="width:3px;height:3px;left:38vw;animation-duration:15s;animation-delay:4s"></div>
+            <div class="particle" style="width:6px;height:6px;left:43vw;animation-duration:12s;animation-delay:6s"></div>
+            <div class="particle" style="width:5px;height:5px;left:48vw;animation-duration:18s;animation-delay:1s"></div>
+            <div class="particle" style="width:7px;height:7px;left:53vw;animation-duration:11s;animation-delay:3s"></div>
+            <div class="particle" style="width:4px;height:4px;left:58vw;animation-duration:14s;animation-delay:8s"></div>
+            <div class="particle" style="width:6px;height:6px;left:63vw;animation-duration:9s;animation-delay:2s"></div>
+            <div class="particle" style="width:3px;height:3px;left:68vw;animation-duration:16s;animation-delay:5s"></div>
+            <div class="particle" style="width:8px;height:8px;left:73vw;animation-duration:13s;animation-delay:0s"></div>
+            <div class="particle" style="width:5px;height:5px;left:78vw;animation-duration:10s;animation-delay:4s"></div>
+            <div class="particle" style="width:4px;height:4px;left:83vw;animation-duration:17s;animation-delay:7s"></div>
+            <div class="particle" style="width:7px;height:7px;left:88vw;animation-duration:12s;animation-delay:1s"></div>
+            <div class="particle" style="width:3px;height:3px;left:93vw;animation-duration:15s;animation-delay:6s"></div>
+            <div class="particle" style="width:6px;height:6px;left:97vw;animation-duration:11s;animation-delay:3s"></div>
+            <div class="particle" style="width:5px;height:5px;left:5vw;animation-duration:18s;animation-delay:9s"></div>
+            <div class="particle" style="width:4px;height:4px;left:16vw;animation-duration:13s;animation-delay:2s"></div>
+            <div class="particle" style="width:7px;height:7px;left:31vw;animation-duration:10s;animation-delay:5s"></div>
+            <div class="particle" style="width:3px;height:3px;left:46vw;animation-duration:16s;animation-delay:0s"></div>
+            <div class="particle" style="width:6px;height:6px;left:61vw;animation-duration:14s;animation-delay:8s"></div>
+            <div class="particle" style="width:5px;height:5px;left:76vw;animation-duration:9s;animation-delay:3s"></div>
+            <div class="particle" style="width:8px;height:8px;left:91vw;animation-duration:12s;animation-delay:6s"></div>
+            <div class="particle" style="width:4px;height:4px;left:36vw;animation-duration:15s;animation-delay:1s"></div>
+            <div class="particle" style="width:6px;height:6px;left:56vw;animation-duration:11s;animation-delay:4s"></div>
+            <div class="particle" style="width:3px;height:3px;left:71vw;animation-duration:17s;animation-delay:7s"></div>
+
+            <div class="petal" style="width:8px;height:8px;left:5vw;animation-duration:13s;animation-delay:0s"></div>
+            <div class="petal" style="width:10px;height:10px;left:15vw;animation-duration:16s;animation-delay:3s"></div>
+            <div class="petal" style="width:7px;height:7px;left:25vw;animation-duration:11s;animation-delay:6s"></div>
+            <div class="petal" style="width:9px;height:9px;left:35vw;animation-duration:14s;animation-delay:1s"></div>
+            <div class="petal" style="width:8px;height:8px;left:45vw;animation-duration:18s;animation-delay:4s"></div>
+            <div class="petal" style="width:11px;height:11px;left:55vw;animation-duration:12s;animation-delay:7s"></div>
+            <div class="petal" style="width:7px;height:7px;left:65vw;animation-duration:15s;animation-delay:2s"></div>
+            <div class="petal" style="width:10px;height:10px;left:75vw;animation-duration:10s;animation-delay:5s"></div>
+            <div class="petal" style="width:8px;height:8px;left:85vw;animation-duration:17s;animation-delay:0s"></div>
+            <div class="petal" style="width:9px;height:9px;left:95vw;animation-duration:13s;animation-delay:8s"></div>
+            <div class="petal" style="width:7px;height:7px;left:10vw;animation-duration:14s;animation-delay:9s"></div>
+            <div class="petal" style="width:11px;height:11px;left:50vw;animation-duration:11s;animation-delay:2s"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="notice-header serif">경조사 안내 | KEFICO</div>
+            <h1 class="hero-names serif">은상 ♥ 하나</h1>
+            <div class="hero-date">2026년 3월 29일 일요일 오후 12시<br>한국프레스센터 20층 국제회의장</div>
+        </div>
+        <a href="#greeting" class="scroll-down">↓</a>
+    </section>
+
+    <!-- ═══════ GREETING & INFO ═══════ -->
+    <section class="section-greeting" id="greeting">
+        <div class="container">
+
+            <div class="ornament reveal serif">초대합니다</div>
+
+            <div class="quote reveal serif">"내가 그의 이름을 불러주었을 때,<br>그는 나에게로 와서 꽃이 되었다"</div>
+
+            <div class="divider reveal"></div>
+
+            <p class="greeting-text reveal">
+                수줍게 고백한 시로 인연을 맺었고,<br>
+                인연의 깊이가 주는 아름다움에 반해 부부가 되려 합니다.<br>
+                저희의 첫 걸음이 시작되는 봄날,<br>
+                귀한 걸음하시어 축복해 주시면 감사하겠습니다.
+            </p>
+
+            <div class="family-info reveal">
+                <div class="family-row">
+                    <div class="family-role">신랑</div>
+                    <div class="family-names"><span>이하영 의 아들</span> 박은상</div>
+                </div>
+                <div class="family-row">
+                    <div class="family-role">신부</div>
+                    <div class="family-names"><span>김희권 · 윤정희 의 딸</span> 김하나</div>
+                </div>
+            </div>
+
+            <!-- VENUE -->
+            <div class="venue-wrap reveal">
+                <div class="venue-info">
+                    <h3 class="serif">오시는 길</h3>
+                    <p><strong>일시</strong>&nbsp;&nbsp;2026년 3월 29일 일요일 오후 12시</p>
+                    <p><strong>장소</strong>&nbsp;&nbsp;한국프레스센터 20층 국제회의장</p>
+                    <p><strong>주소</strong>&nbsp;&nbsp;서울 중구 세종대로 124</p>
+                </div>
+            </div>
+
+            <!-- CALENDAR -->
+            <div class="calendar-wrapper reveal">
+                <div class="calendar-header serif">March 2026</div>
+                <div class="calendar-grid">
+                    <div class="cal-hd">S</div><div class="cal-hd">M</div><div class="cal-hd">T</div><div class="cal-hd">W</div><div class="cal-hd">T</div><div class="cal-hd">F</div><div class="cal-hd">S</div>
+                    <div class="cal-d cal-sun">1</div><div class="cal-d">2</div><div class="cal-d">3</div><div class="cal-d">4</div><div class="cal-d">5</div><div class="cal-d">6</div><div class="cal-d">7</div>
+                    <div class="cal-d cal-sun">8</div><div class="cal-d">9</div><div class="cal-d">10</div><div class="cal-d">11</div><div class="cal-d">12</div><div class="cal-d">13</div><div class="cal-d">14</div>
+                    <div class="cal-d cal-sun">15</div><div class="cal-d">16</div><div class="cal-d">17</div><div class="cal-d">18</div><div class="cal-d">19</div><div class="cal-d">20</div><div class="cal-d">21</div>
+                    <div class="cal-d cal-sun">22</div><div class="cal-d">23</div><div class="cal-d">24</div><div class="cal-d">25</div><div class="cal-d">26</div><div class="cal-d">27</div><div class="cal-d">28</div>
+                    <div class="cal-d cal-today">29</div><div class="cal-d">30</div><div class="cal-d">31</div><div class="cal-d cal-e"></div><div class="cal-d cal-e"></div><div class="cal-d cal-e"></div><div class="cal-d cal-e"></div>
+                </div>
+            </div>
+
+            <!-- TRANSPORT -->
+            <div class="transport-grid reveal">
+                <div class="transport-card">
+                    <div class="t-icon">🚇</div>
+                    <div class="t-title">지하철</div>
+                    <div class="t-desc">1호선 시청역<br>3번 출구 도보 1분</div>
+                </div>
+                <div class="transport-card">
+                    <div class="t-icon">🚌</div>
+                    <div class="t-title">버스</div>
+                    <div class="t-desc">프레스센터 앞<br>정류장 하차</div>
+                </div>
+                <div class="transport-card">
+                    <div class="t-icon">🅿️</div>
+                    <div class="t-title">주차</div>
+                    <div class="t-desc">프레스센터<br>지하주차장 이용</div>
+                </div>
+            </div>
+
+            <!-- ACCOUNT -->
+            <div class="account-card reveal">
+                <div class="acc-label">마음 전하실 곳</div>
+                <div class="acc-num">카카오뱅크 3333016669986</div>
+                <div class="acc-name">박은상</div>
+            </div>
+
+            <a class="mobile-invitation reveal" href="https://toourguest.com/cards/hanaeunsang">모바일 청첩장 바로가기</a>
+        </div>
+    </section>
+
+    <!-- ═══════ GALLERY ═══════ -->
+    <section class="gallery">
+        <h2 class="gallery-title serif reveal">Our Memories</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item item-with-dog reveal-left">
+                <img src="https://imagedelivery.net/9PYUDgg_yiUa2u-j77sFBg/de65abbb-b5fc-4307-0461-7781dcfbb700/public" alt=""/>
+            </div>
+            <div class="gallery-item item-veil reveal-scale">
+                <img src="https://imagedelivery.net/9PYUDgg_yiUa2u-j77sFBg/bcb9e698-7164-4d8e-c17c-033980309500/public" alt=""/>
+            </div>
+            <div class="gallery-item item-formal reveal-right">
+                <img src="https://imagedelivery.net/9PYUDgg_yiUa2u-j77sFBg/05c15515-e99c-4188-4171-1a5b44299500/public" alt=""/>
+            </div>
+            <div class="gallery-item item-solo-man reveal-left">
+                <img src="https://imagedelivery.net/9PYUDgg_yiUa2u-j77sFBg/f86193a3-cedd-48b1-e53f-2c0711135d00/public" alt=""/>
+            </div>
+            <div class="gallery-item item-solo-bride reveal-right">
+                <img src="https://imagedelivery.net/9PYUDgg_yiUa2u-j77sFBg/9600b1e1-9e62-4ae5-a16a-e7eb59ae6400/public" alt=""/>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ FOOTER ═══════ -->
+    <footer class="footer">
+        <!-- Sparkle dots -->
+        <div class="sparkle" style="top:15%;left:10%;animation-duration:2.5s;animation-delay:0s"></div>
+        <div class="sparkle" style="top:25%;left:85%;animation-duration:3.2s;animation-delay:1s"></div>
+        <div class="sparkle" style="top:70%;left:15%;animation-duration:2.8s;animation-delay:0.5s"></div>
+        <div class="sparkle" style="top:80%;left:90%;animation-duration:3.5s;animation-delay:1.5s"></div>
+        <div class="sparkle" style="top:10%;left:50%;animation-duration:2.2s;animation-delay:0.8s"></div>
+        <div class="sparkle" style="top:60%;left:70%;animation-duration:3s;animation-delay:2s"></div>
+        <div class="sparkle" style="top:40%;left:25%;animation-duration:2.6s;animation-delay:0.3s"></div>
+        <div class="sparkle" style="top:85%;left:40%;animation-duration:3.3s;animation-delay:1.2s"></div>
+        <div class="sparkle" style="top:50%;left:60%;animation-duration:2.4s;animation-delay:0.7s"></div>
+        <div class="sparkle" style="top:30%;left:5%;animation-duration:3.1s;animation-delay:1.8s"></div>
+        <div class="sparkle" style="top:20%;left:35%;animation-duration:2.7s;animation-delay:2.5s"></div>
+        <div class="sparkle" style="top:75%;left:55%;animation-duration:2.9s;animation-delay:0.2s"></div>
+
+        <div class="footer-label serif reveal">WEDDING DAY</div>
+        <div class="wedding-date serif reveal">2026. 03. 29</div>
+        <div class="wedding-day-sub reveal">SUNDAY · PM 12:00</div>
+        <p class="closing-msg serif reveal">새로운 시작을 축복해 주세요</p>
+    </footer>
+
+</body>
+</html>
